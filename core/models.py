@@ -45,6 +45,13 @@ class Snapshot(BaseModel):
     results: list[CommandResult]
 
 
+class Board(BaseModel):
+    width: BoardDim = 5
+    height: BoardDim = 5
+    obstacle_map: dict[tuple[int, int], str] = {}
+    occupied: dict[tuple[int, int], str] = {}
+
+
 class SimulationRequest(BaseModel):
     width: BoardDim = 5
     height: BoardDim = 5
