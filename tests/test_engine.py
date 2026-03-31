@@ -49,9 +49,6 @@ def _left_cmd(count=1) -> Command:
     return Command(type="LEFT", count=count)
 
 
-def _right_cmd(count=1) -> Command:
-    return Command(type="RIGHT", count=count)
-
 
 def _report_cmd() -> Command:
     return Command(type="REPORT")
@@ -162,40 +159,20 @@ class TestFallPrevention:
 
 
 class TestTurning:
-    def test_right(self):
-        res = _sim(["A"], [["PLACE 0,0,NORTH", "RIGHT", "REPORT"]])
-        assert res.snapshots[1] == Snapshot(
-            turn=1,
-            robots=[_robot("A", 0, 0, Direction.EAST)],
-            results=[_result("A", _right_cmd(), executed=True)],
-        )
-        assert res.snapshots[2].results[0].output == "0,0,EAST"
-
-    def test_left_n(self):
-        # LEFT 3 from NORTH = EAST (270 CCW = 90 CW)
-        res = _sim(["A"], [["PLACE 0,0,NORTH", "LEFT 3", "REPORT"]])
-        assert res.snapshots[1] == Snapshot(
-            turn=1,
-            robots=[_robot("A", 0, 0, Direction.EAST)],
-            results=[_result("A", _left_cmd(3), executed=True)],
-        )
-        assert res.snapshots[2].results[0].output == "0,0,EAST"
-
-    def test_right_n(self):
-        # RIGHT 2 from NORTH = SOUTH
-        res = _sim(["A"], [["PLACE 0,0,NORTH", "RIGHT 2", "REPORT"]])
-        assert res.snapshots[1].robots[0].facing == Direction.SOUTH
-        assert res.snapshots[2].results[0].output == "0,0,SOUTH"
-
-    def test_left_4_no_change(self):
-        res = _sim(["A"], [["PLACE 0,0,NORTH", "LEFT 4", "REPORT"]])
-        assert res.snapshots[1].robots[0].facing == Direction.NORTH
-        assert res.snapshots[2].results[0].output == "0,0,NORTH"
-
-    def test_right_4_no_change(self):
-        res = _sim(["A"], [["PLACE 0,0,NORTH", "RIGHT 4", "REPORT"]])
-        assert res.snapshots[1].robots[0].facing == Direction.NORTH
-        assert res.snapshots[2].results[0].output == "0,0,NORTH"
+    @pytest.mark.parametrize(
+        "cmd_str,expected_facing",
+        [
+            ("RIGHT", Direction.EAST),
+            ("LEFT 3", Direction.EAST),
+            ("RIGHT 2", Direction.SOUTH),
+            ("LEFT 4", Direction.NORTH),
+            ("RIGHT 4", Direction.NORTH),
+        ],
+    )
+    def test_turning(self, cmd_str, expected_facing):
+        res = _sim(["A"], [["PLACE 0,0,NORTH", cmd_str, "REPORT"]])
+        assert res.snapshots[1].robots[0].facing == expected_facing
+        assert res.snapshots[2].results[0].output == f"0,0,{expected_facing.value}"
 
 
 class TestMoveN:
@@ -528,13 +505,11 @@ class TestEdgeCases:
         with pytest.raises(ValidationError):
             SimulationRequest(width=5, height=4, robot_names=[], command_stacks=[])
 
-    def test_place_on_corner_cells(self):
+    @pytest.mark.parametrize("x,y", [(0, 0), (4, 0), (0, 4), (4, 4)])
+    def test_place_on_corner_cells(self, x, y):
         """All four corners of a 5x5 board should be valid PLACE targets."""
-        for x, y in [(0, 0), (4, 0), (0, 4), (4, 4)]:
-            res = _sim(["A"], [[f"PLACE {x},{y},NORTH"]])
-            assert res.snapshots[0].results[0].executed is True, (
-                f"Corner ({x},{y}) should be placeable"
-            )
+        res = _sim(["A"], [[f"PLACE {x},{y},NORTH"]])
+        assert res.snapshots[0].results[0].executed is True
 
     def test_place_just_outside_board(self):
         """Coordinates exactly at width/height are out of bounds."""
@@ -548,23 +523,22 @@ class TestEdgeCases:
         reason = res.snapshots[0].results[0].reason
         assert reason is not None and "out of bounds" in reason
 
-    def test_move_zero_count(self):
-        """MOVE 0 is parsed but results in no movement; executed=False."""
-        res = _sim(["A"], [["PLACE 2,2,NORTH", "MOVE 0", "REPORT"]])
-        assert res.snapshots[1].results[0].executed is False
-        assert res.snapshots[2].results[0].output == "2,2,NORTH"
-
-    def test_left_zero_count(self):
-        """LEFT 0 rotates 0 steps; facing unchanged; executed=True."""
-        res = _sim(["A"], [["PLACE 0,0,NORTH", "LEFT 0", "REPORT"]])
-        assert res.snapshots[1].results[0].executed is True
-        assert res.snapshots[2].results[0].output == "0,0,NORTH"
-
-    def test_right_zero_count(self):
-        """RIGHT 0 rotates 0 steps; facing unchanged; executed=True."""
-        res = _sim(["A"], [["PLACE 0,0,NORTH", "RIGHT 0", "REPORT"]])
-        assert res.snapshots[1].results[0].executed is True
-        assert res.snapshots[2].results[0].output == "0,0,NORTH"
+    @pytest.mark.parametrize(
+        "cmd_str,should_execute,start_x,start_y",
+        [
+            ("MOVE 0", False, 2, 2),
+            ("LEFT 0", True, 0, 0),
+            ("RIGHT 0", True, 0, 0),
+        ],
+    )
+    def test_zero_count_commands(self, cmd_str, should_execute, start_x, start_y):
+        res = _sim(
+            ["A"], [[f"PLACE {start_x},{start_y},NORTH", cmd_str, "REPORT"]]
+        )
+        assert res.snapshots[1].results[0].executed is should_execute
+        assert (
+            res.snapshots[2].results[0].output == f"{start_x},{start_y},NORTH"
+        )
 
     def test_no_robots_no_commands(self):
         """Empty simulation produces zero snapshots."""
