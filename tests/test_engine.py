@@ -101,9 +101,7 @@ class TestSingleRobotBasics:
         ]
 
     def test_example3_compound_movement(self):
-        res = _sim(
-            {"A": ["PLACE 1,2,EAST", "MOVE", "MOVE", "LEFT", "MOVE", "REPORT"]}
-        )
+        res = _sim({"A": ["PLACE 1,2,EAST", "MOVE", "MOVE", "LEFT", "MOVE", "REPORT"]})
         assert res.snapshots[5] == Snapshot(
             turn=5,
             robots=[_robot("A", 3, 3, Direction.NORTH)],
@@ -201,10 +199,12 @@ class TestMoveN:
         assert res.snapshots[2].results[0].output == "1,2,EAST"
 
     def test_move_n_stopped_by_robot(self):
-        res = _sim({
-            "A": ["PLACE 0,0,EAST", "MOVE 5"],
-            "B": ["PLACE 3,0,NORTH", None],
-        })
+        res = _sim(
+            {
+                "A": ["PLACE 0,0,EAST", "MOVE 5"],
+                "B": ["PLACE 3,0,NORTH", None],
+            }
+        )
         assert res.snapshots[1] == Snapshot(
             turn=1,
             robots=[
@@ -255,10 +255,12 @@ class TestMultiRobotNoCollision:
     """Example 6 from spec."""
 
     def test_example6(self):
-        res = _sim({
-            "A": ["PLACE 0,0,NORTH", "MOVE", "REPORT"],
-            "B": ["PLACE 4,4,SOUTH", "MOVE", "REPORT"],
-        })
+        res = _sim(
+            {
+                "A": ["PLACE 0,0,NORTH", "MOVE", "REPORT"],
+                "B": ["PLACE 4,4,SOUTH", "MOVE", "REPORT"],
+            }
+        )
         assert res.snapshots[2] == Snapshot(
             turn=2,
             robots=[
@@ -276,10 +278,12 @@ class TestMultiRobotCollision:
     """Examples 7 and 9 from spec."""
 
     def test_example7_mutual_blocking(self):
-        res = _sim({
-            "A": ["PLACE 2,2,EAST", "MOVE"],
-            "B": ["PLACE 3,2,WEST", "MOVE"],
-        })
+        res = _sim(
+            {
+                "A": ["PLACE 2,2,EAST", "MOVE"],
+                "B": ["PLACE 3,2,WEST", "MOVE"],
+            }
+        )
         assert res.snapshots[1] == Snapshot(
             turn=1,
             robots=[
@@ -303,10 +307,12 @@ class TestMultiRobotCollision:
         )
 
     def test_example9_place_occupied(self):
-        res = _sim({
-            "A": ["PLACE 2,2,NORTH", "REPORT"],
-            "B": ["PLACE 2,2,SOUTH", "REPORT"],
-        })
+        res = _sim(
+            {
+                "A": ["PLACE 2,2,NORTH", "REPORT"],
+                "B": ["PLACE 2,2,SOUTH", "REPORT"],
+            }
+        )
         assert res.snapshots[0] == Snapshot(
             turn=0,
             robots=[
@@ -387,10 +393,12 @@ class TestResolutionOrder:
     """Example 10 from spec."""
 
     def test_example10_sequential_resolution(self):
-        res = _sim({
-            "A": ["PLACE 1,0,NORTH", "MOVE"],
-            "B": ["PLACE 2,0,NORTH", "PLACE 1,0,EAST"],
-        })
+        res = _sim(
+            {
+                "A": ["PLACE 1,0,NORTH", "MOVE"],
+                "B": ["PLACE 2,0,NORTH", "PLACE 1,0,EAST"],
+            }
+        )
         # Turn 1: A moves to (1,1), then B places at (1,0) which is now empty
         assert res.snapshots[1] == Snapshot(
             turn=1,
@@ -463,10 +471,12 @@ class TestRePlace:
 
     def test_re_place_frees_old_cell(self):
         """After A re-places, B can occupy A's old cell."""
-        res = _sim({
-            "A": ["PLACE 0,0,NORTH", "PLACE 3,3,SOUTH"],
-            "B": ["PLACE 1,1,EAST", "PLACE 0,0,EAST"],
-        })
+        res = _sim(
+            {
+                "A": ["PLACE 0,0,NORTH", "PLACE 3,3,SOUTH"],
+                "B": ["PLACE 1,1,EAST", "PLACE 0,0,EAST"],
+            }
+        )
         assert res.snapshots[1].results[1].executed is True
         assert res.snapshots[1].robots[1].x == 0
         assert res.snapshots[1].robots[1].y == 0
@@ -512,13 +522,9 @@ class TestEdgeCases:
         ],
     )
     def test_zero_count_commands(self, cmd_str, should_execute, start_x, start_y):
-        res = _sim(
-            {"A": [f"PLACE {start_x},{start_y},NORTH", cmd_str, "REPORT"]}
-        )
+        res = _sim({"A": [f"PLACE {start_x},{start_y},NORTH", cmd_str, "REPORT"]})
         assert res.snapshots[1].results[0].executed is should_execute
-        assert (
-            res.snapshots[2].results[0].output == f"{start_x},{start_y},NORTH"
-        )
+        assert res.snapshots[2].results[0].output == f"{start_x},{start_y},NORTH"
 
     def test_no_robots_no_commands(self):
         """Empty simulation produces zero snapshots."""
