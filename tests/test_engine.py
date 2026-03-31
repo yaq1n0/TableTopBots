@@ -1,4 +1,5 @@
 import pytest
+from pydantic import ValidationError
 
 from core.engine import simulate
 from core.models import (
@@ -522,9 +523,9 @@ class TestEdgeCases:
 
     def test_board_smaller_than_minimum_rejected(self):
         """Boards smaller than 5x5 are rejected at model validation."""
-        with pytest.raises(Exception):
+        with pytest.raises(ValidationError):
             SimulationRequest(width=4, height=5, robot_names=[], command_stacks=[])
-        with pytest.raises(Exception):
+        with pytest.raises(ValidationError):
             SimulationRequest(width=5, height=4, robot_names=[], command_stacks=[])
 
     def test_place_on_corner_cells(self):
@@ -546,7 +547,7 @@ class TestEdgeCases:
         assert "out of bounds" in res.snapshots[0].results[0].reason
 
     def test_move_zero_count(self):
-        """MOVE 0 is parsed but results in no movement; executed=False (no steps taken)."""
+        """MOVE 0 is parsed but results in no movement; executed=False."""
         res = _sim(["A"], [["PLACE 2,2,NORTH", "MOVE 0", "REPORT"]])
         assert res.snapshots[1].results[0].executed is False
         assert res.snapshots[2].results[0].output == "2,2,NORTH"
