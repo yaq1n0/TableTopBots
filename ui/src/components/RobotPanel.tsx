@@ -37,7 +37,7 @@ function RobotPanelRun({ name, result }: RunProps) {
               ? result.command.type +
                 (result.command.type === 'PLACE'
                   ? ` ${result.command.x},${result.command.y},${result.command.facing}`
-                  : result.command.count > 1
+                  : result.command.type !== 'REPORT' && result.command.count > 1
                     ? ` ${result.command.count}`
                     : '')
               : 'none'}
