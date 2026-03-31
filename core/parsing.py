@@ -2,7 +2,14 @@ from __future__ import annotations
 
 import re
 
-from core.models import Command, Direction
+from core.models import (
+    Direction,
+    LeftCommand,
+    MoveCommand,
+    PlaceCommand,
+    ReportCommand,
+    RightCommand,
+)
 
 _PLACE_RE = re.compile(
     r"^PLACE\s+(\d+)\s*,\s*(\d+)\s*,\s*(NORTH|SOUTH|EAST|WEST)$", re.IGNORECASE
@@ -13,13 +20,14 @@ _RIGHT_RE = re.compile(r"^RIGHT(?:\s+(\d+))?$", re.IGNORECASE)
 _REPORT_RE = re.compile(r"^REPORT$", re.IGNORECASE)
 
 
-def parse_command(s: str) -> Command:
+def parse_command(
+    s: str,
+) -> PlaceCommand | MoveCommand | LeftCommand | RightCommand | ReportCommand:
     s = s.strip()
 
     m = _PLACE_RE.match(s)
     if m:
-        return Command(
-            type="PLACE",
+        return PlaceCommand(
             x=int(m.group(1)),
             y=int(m.group(2)),
             facing=Direction(m.group(3).upper()),
@@ -28,21 +36,21 @@ def parse_command(s: str) -> Command:
     m = _MOVE_RE.match(s)
     if m:
         count = int(m.group(1)) if m.group(1) else 1
-        return Command(type="MOVE", count=count)
+        return MoveCommand(count=count)
 
     m = _LEFT_RE.match(s)
     if m:
         count = int(m.group(1)) if m.group(1) else 1
-        return Command(type="LEFT", count=count)
+        return LeftCommand(count=count)
 
     m = _RIGHT_RE.match(s)
     if m:
         count = int(m.group(1)) if m.group(1) else 1
-        return Command(type="RIGHT", count=count)
+        return RightCommand(count=count)
 
     m = _REPORT_RE.match(s)
     if m:
-        return Command(type="REPORT")
+        return ReportCommand()
 
     raise ValueError(f"Invalid command: {s}")
 

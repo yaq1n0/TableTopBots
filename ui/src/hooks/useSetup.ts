@@ -50,19 +50,19 @@ export function useSetup(
       robots.length === 0
         ? 0
         : Math.max(...robots.map((r) => r.commands.length))
-    const paddedStacks = robots.map((r) => {
+    const robotsMap: Record<string, (string | null)[]> = {}
+    for (const r of robots) {
       const stack: (string | null)[] = [...r.commands]
       while (stack.length < maxLen) stack.push(null)
-      return stack
-    })
+      robotsMap[r.name] = stack
+    }
 
     try {
       const res = await simulate({
         width,
         height,
         obstacles,
-        robot_names: robots.map((r) => r.name),
-        command_stacks: paddedStacks,
+        robots: robotsMap,
       })
       onRunComplete(res)
     } catch (e) {

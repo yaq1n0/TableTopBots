@@ -15,12 +15,36 @@ class Direction(StrEnum):
     WEST = "WEST"
 
 
-class Command(BaseModel):
-    type: Literal["PLACE", "MOVE", "LEFT", "RIGHT", "REPORT"]
-    x: int | None = None
-    y: int | None = None
-    facing: Direction | None = None
+class PlaceCommand(BaseModel):
+    type: Literal["PLACE"] = "PLACE"
+    x: int
+    y: int
+    facing: Direction
+
+
+class MoveCommand(BaseModel):
+    type: Literal["MOVE"] = "MOVE"
     count: int = 1
+
+
+class LeftCommand(BaseModel):
+    type: Literal["LEFT"] = "LEFT"
+    count: int = 1
+
+
+class RightCommand(BaseModel):
+    type: Literal["RIGHT"] = "RIGHT"
+    count: int = 1
+
+
+class ReportCommand(BaseModel):
+    type: Literal["REPORT"] = "REPORT"
+
+
+Command = Annotated[
+    PlaceCommand | MoveCommand | LeftCommand | RightCommand | ReportCommand,
+    Field(discriminator="type"),
+]
 
 
 class RobotState(BaseModel):
@@ -56,8 +80,7 @@ class SimulationRequest(BaseModel):
     width: BoardDim = 5
     height: BoardDim = 5
     obstacles: dict[str, list[tuple[int, int]]] = {}
-    robot_names: list[str] = []
-    command_stacks: list[list[str | None]] = []
+    robots: dict[str, list[str | None]] = {}
 
 
 class SimulationResponse(BaseModel):
