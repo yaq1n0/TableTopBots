@@ -2,6 +2,11 @@
 
 A simulation web-app of multiple toy robots moving on a configurable table top.
 
+## Images
+![Setup](/images/setup.png)
+
+![Simulation](/images/simulation.png)
+
 ## Stack
 
 - **Python core** (`/core`): pure logic, no I/O, no framework dependencies
