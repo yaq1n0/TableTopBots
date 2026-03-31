@@ -15,21 +15,14 @@ test:
 lint:
 	ruff check core/ api/ tests/
 
+lint-fix:
+	ruff check core/ api/ tests/ --fix
+
 format:
+	ruff format core/ api/ tests/ --check
+
+format-fix:
 	ruff format core/ api/ tests/
-
-# ── TypeScript ───────────────────────────────────────────
-ui-build:
-	cd ui && npm run build
-
-ui-typecheck:
-	cd ui && npx tsc -b
-
-ui-lint:
-	cd ui && npx eslint .
-
-ui-format:
-	cd ui && npx prettier --write "src/**/*.{ts,tsx,css}"
 
 # ── Dev servers ──────────────────────────────────────────
 server:
