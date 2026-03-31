@@ -156,7 +156,7 @@ class TestFallPrevention:
         res = _sim(["A"], [[f"PLACE {x},{y},{direction}", "MOVE"]])
         result = res.snapshots[1].results[0]
         assert result.executed is False
-        assert "fall off" in result.reason
+        assert result.reason is not None and "fall off" in result.reason
         assert res.snapshots[1].robots[0].x == x
         assert res.snapshots[1].robots[0].y == y
 
@@ -540,11 +540,11 @@ class TestEdgeCases:
         """Coordinates exactly at width/height are out of bounds."""
         res = _sim(["A"], [["PLACE 5,0,NORTH"]])
         assert res.snapshots[0].results[0].executed is False
-        assert "out of bounds" in res.snapshots[0].results[0].reason
+        assert res.snapshots[0].results[0].reason is not None and "out of bounds" in res.snapshots[0].results[0].reason
 
         res = _sim(["A"], [["PLACE 0,5,NORTH"]])
         assert res.snapshots[0].results[0].executed is False
-        assert "out of bounds" in res.snapshots[0].results[0].reason
+        assert res.snapshots[0].results[0].reason is not None and "out of bounds" in res.snapshots[0].results[0].reason
 
     def test_move_zero_count(self):
         """MOVE 0 is parsed but results in no movement; executed=False."""
