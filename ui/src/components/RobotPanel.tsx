@@ -25,55 +25,53 @@ interface RunProps {
 
 type Props = SetupProps | RunProps
 
-export default function RobotPanel(props: Props) {
+function RobotPanelRun({ name, result }: RunProps) {
+  return (
+    <div className="border rounded p-3 mb-2">
+      <h3 className="font-bold text-sm mb-1">{name}</h3>
+      {result ? (
+        <div className="text-sm">
+          <p>
+            <span className="font-medium">Command: </span>
+            {result.command
+              ? result.command.type +
+                (result.command.type === 'PLACE'
+                  ? ` ${result.command.x},${result.command.y},${result.command.facing}`
+                  : result.command.count > 1
+                    ? ` ${result.command.count}`
+                    : '')
+              : 'none'}
+          </p>
+          <p>
+            <span
+              className={`inline-block px-1.5 py-0.5 rounded text-xs font-medium ${
+                result.executed
+                  ? 'bg-green-100 text-green-800'
+                  : 'bg-red-100 text-red-800'
+              }`}
+            >
+              {result.executed ? 'Executed' : 'Blocked'}
+            </span>
+          </p>
+          {result.reason && (
+            <p className="text-gray-500 text-xs mt-0.5">{result.reason}</p>
+          )}
+          {result.output && (
+            <p className="font-mono bg-gray-100 px-2 py-1 rounded mt-1 text-xs">
+              Output: {result.output}
+            </p>
+          )}
+        </div>
+      ) : (
+        <p className="text-sm text-gray-400">No result</p>
+      )}
+    </div>
+  )
+}
+
+function RobotPanelSetup({ name, commands, onCommandsChange, onRemove }: SetupProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  if (props.mode === 'run') {
-    const { name, result } = props
-    return (
-      <div className="border rounded p-3 mb-2">
-        <h3 className="font-bold text-sm mb-1">{name}</h3>
-        {result ? (
-          <div className="text-sm">
-            <p>
-              <span className="font-medium">Command: </span>
-              {result.command
-                ? result.command.type +
-                  (result.command.type === 'PLACE'
-                    ? ` ${result.command.x},${result.command.y},${result.command.facing}`
-                    : result.command.count > 1
-                      ? ` ${result.command.count}`
-                      : '')
-                : 'none'}
-            </p>
-            <p>
-              <span
-                className={`inline-block px-1.5 py-0.5 rounded text-xs font-medium ${
-                  result.executed
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-red-100 text-red-800'
-                }`}
-              >
-                {result.executed ? 'Executed' : 'Blocked'}
-              </span>
-            </p>
-            {result.reason && (
-              <p className="text-gray-500 text-xs mt-0.5">{result.reason}</p>
-            )}
-            {result.output && (
-              <p className="font-mono bg-gray-100 px-2 py-1 rounded mt-1 text-xs">
-                Output: {result.output}
-              </p>
-            )}
-          </div>
-        ) : (
-          <p className="text-sm text-gray-400">No result</p>
-        )}
-      </div>
-    )
-  }
-
-  const { name, commands, onCommandsChange, onRemove } = props
   // Use local draft text so the textarea preserves whitespace/newlines while typing.
   // Only sync trimmed, non-empty commands to the parent on change.
   const commandsJoined = commands.filter((c): c is string => c !== null).join('\n')
@@ -84,6 +82,11 @@ export default function RobotPanel(props: Props) {
   useEffect(() => {
     listInstructions().then(setInstructionFiles).catch(() => {})
   }, [])
+
+  // Sync draft when commands change externally (e.g. file import)
+  useEffect(() => {
+    setDraft(commandsJoined)
+  }, [commandsJoined])
 
   async function handleLoadInstructions(fileName: string) {
     const cmds = await loadInstructions(fileName)
@@ -99,11 +102,6 @@ export default function RobotPanel(props: Props) {
     await saveInstructions(fileName.trim(), cmds)
     setInstructionFiles(await listInstructions())
   }
-
-  // Sync draft when commands change externally (e.g. file import)
-  useEffect(() => {
-    setDraft(commandsJoined)
-  }, [commandsJoined])
 
   function handleTextChange(text: string) {
     setDraft(text)
@@ -196,4 +194,11 @@ export default function RobotPanel(props: Props) {
       />
     </div>
   )
+}
+
+export default function RobotPanel(props: Props) {
+  if (props.mode === 'run') {
+    return <RobotPanelRun {...props} />
+  }
+  return <RobotPanelSetup {...props} />
 }

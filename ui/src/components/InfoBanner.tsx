@@ -5,15 +5,13 @@ interface Props {
   duration?: number
 }
 
-export default function InfoBanner({ message, duration = 2000 }: Props) {
-  const [visible, setVisible] = useState(false)
+function InfoBannerInner({ message, duration = 2000 }: { message: string; duration?: number }) {
+  const [visible, setVisible] = useState(true)
 
   useEffect(() => {
-    if (!message) { setVisible(false); return }
-    setVisible(true)
     const t = setTimeout(() => setVisible(false), duration)
     return () => clearTimeout(t)
-  }, [message, duration])
+  }, [duration])
 
   if (!visible) return null
   return (
@@ -21,4 +19,9 @@ export default function InfoBanner({ message, duration = 2000 }: Props) {
       {message}
     </div>
   )
+}
+
+export default function InfoBanner({ message, duration }: Props) {
+  if (!message) return null
+  return <InfoBannerInner key={message} message={message} duration={duration} />
 }
