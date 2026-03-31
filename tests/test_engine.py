@@ -1,7 +1,14 @@
 import pytest
 
 from core.engine import simulate
-from core.models import Command, CommandResult, Direction, RobotState, SimulationRequest, Snapshot
+from core.models import (
+    Command,
+    CommandResult,
+    Direction,
+    RobotState,
+    SimulationRequest,
+    Snapshot,
+)
 
 
 def _sim(robot_names, command_stacks, width=5, height=5, obstacles=None):
@@ -21,7 +28,11 @@ def _robot(name, x, y, facing, placed=True) -> RobotState:
 
 def _result(robot_name, cmd, executed, reason=None, output=None) -> CommandResult:
     return CommandResult(
-        robot_name=robot_name, command=cmd, executed=executed, reason=reason, output=output
+        robot_name=robot_name,
+        command=cmd,
+        executed=executed,
+        reason=reason,
+        output=output,
     )
 
 
@@ -64,7 +75,9 @@ class TestSingleRobotBasics:
             Snapshot(
                 turn=2,
                 robots=[_robot("A", 0, 1, Direction.NORTH)],
-                results=[_result("A", _report_cmd(), executed=True, output="0,1,NORTH")],
+                results=[
+                    _result("A", _report_cmd(), executed=True, output="0,1,NORTH")
+                ],
             ),
         ]
 
@@ -107,7 +120,14 @@ class TestSingleRobotBasics:
         assert res.snapshots[2] == Snapshot(
             turn=2,
             robots=[_robot("A", 2 + dx, 2 + dy, Direction(direction))],
-            results=[_result("A", _report_cmd(), executed=True, output=f"{2+dx},{2+dy},{direction}")],
+            results=[
+                _result(
+                    "A",
+                    _report_cmd(),
+                    executed=True,
+                    output=f"{2 + dx},{2 + dy},{direction}",
+                )
+            ],
         )
 
 
@@ -119,7 +139,11 @@ class TestFallPrevention:
         assert res.snapshots[1] == Snapshot(
             turn=1,
             robots=[_robot("A", 4, 4, Direction.NORTH)],
-            results=[_result("A", _move_cmd(), executed=False, reason="would fall off north edge")],
+            results=[
+                _result(
+                    "A", _move_cmd(), executed=False, reason="would fall off north edge"
+                )
+            ],
         )
         assert res.snapshots[2].results[0].output == "4,4,NORTH"
 
@@ -223,7 +247,14 @@ class TestMoveN:
         assert res.snapshots[1] == Snapshot(
             turn=1,
             robots=[_robot("A", 4, 4, Direction.NORTH)],
-            results=[_result("A", _move_cmd(3), executed=False, reason="would fall off north edge")],
+            results=[
+                _result(
+                    "A",
+                    _move_cmd(3),
+                    executed=False,
+                    reason="would fall off north edge",
+                )
+            ],
         )
 
     def test_move_n_first_cell_blocked_by_obstacle(self):
@@ -235,7 +266,14 @@ class TestMoveN:
         assert res.snapshots[1] == Snapshot(
             turn=1,
             robots=[_robot("A", 0, 2, Direction.EAST)],
-            results=[_result("A", _move_cmd(3), executed=False, reason='blocked by obstacle "wall" at (1,2)')],
+            results=[
+                _result(
+                    "A",
+                    _move_cmd(3),
+                    executed=False,
+                    reason='blocked by obstacle "wall" at (1,2)',
+                )
+            ],
         )
 
 
@@ -281,8 +319,18 @@ class TestMultiRobotCollision:
                 _robot("B", 3, 2, Direction.WEST),
             ],
             results=[
-                _result("A", _move_cmd(), executed=False, reason="collision with robot B at (3,2)"),
-                _result("B", _move_cmd(), executed=False, reason="collision with robot A at (2,2)"),
+                _result(
+                    "A",
+                    _move_cmd(),
+                    executed=False,
+                    reason="collision with robot B at (3,2)",
+                ),
+                _result(
+                    "B",
+                    _move_cmd(),
+                    executed=False,
+                    reason="collision with robot A at (2,2)",
+                ),
             ],
         )
 
@@ -302,7 +350,12 @@ class TestMultiRobotCollision:
             ],
             results=[
                 _result("A", _place_cmd(2, 2, "NORTH"), executed=True),
-                _result("B", _place_cmd(2, 2, "SOUTH"), executed=False, reason="cell (2,2) occupied by robot A"),
+                _result(
+                    "B",
+                    _place_cmd(2, 2, "SOUTH"),
+                    executed=False,
+                    reason="cell (2,2) occupied by robot A",
+                ),
             ],
         )
         # B not placed, so REPORT in turn 1 fails
@@ -340,7 +393,14 @@ class TestObstacleBlocking:
         assert res.snapshots[1] == Snapshot(
             turn=1,
             robots=[_robot("A", 1, 2, Direction.EAST)],
-            results=[_result("A", _move_cmd(), executed=False, reason='blocked by obstacle "wall" at (2,2)')],
+            results=[
+                _result(
+                    "A",
+                    _move_cmd(),
+                    executed=False,
+                    reason='blocked by obstacle "wall" at (2,2)',
+                )
+            ],
         )
 
     def test_place_on_obstacle(self):
@@ -348,7 +408,14 @@ class TestObstacleBlocking:
         assert res.snapshots[0] == Snapshot(
             turn=0,
             robots=[_robot("A", 0, 0, Direction.NORTH, placed=False)],
-            results=[_result("A", _place_cmd(2, 2, "NORTH"), executed=False, reason='cell (2,2) occupied by obstacle "rock"')],
+            results=[
+                _result(
+                    "A",
+                    _place_cmd(2, 2, "NORTH"),
+                    executed=False,
+                    reason='cell (2,2) occupied by obstacle "rock"',
+                )
+            ],
         )
 
 
@@ -383,7 +450,9 @@ class TestUnplacedRobot:
         assert res.snapshots[0] == Snapshot(
             turn=0,
             robots=[_robot("A", 0, 0, Direction.NORTH, placed=False)],
-            results=[_result("A", _move_cmd(), executed=False, reason="robot not placed")],
+            results=[
+                _result("A", _move_cmd(), executed=False, reason="robot not placed")
+            ],
         )
         assert res.snapshots[2].results[0].output == "0,0,NORTH"
 
@@ -392,12 +461,21 @@ class TestUnplacedRobot:
         assert res.snapshots[0] == Snapshot(
             turn=0,
             robots=[_robot("A", 0, 0, Direction.NORTH, placed=False)],
-            results=[_result("A", _place_cmd(10, 10, "NORTH"), executed=False, reason="position (10,10) is out of bounds")],
+            results=[
+                _result(
+                    "A",
+                    _place_cmd(10, 10, "NORTH"),
+                    executed=False,
+                    reason="position (10,10) is out of bounds",
+                )
+            ],
         )
         assert res.snapshots[1] == Snapshot(
             turn=1,
             robots=[_robot("A", 0, 0, Direction.NORTH, placed=False)],
-            results=[_result("A", _report_cmd(), executed=False, reason="robot not placed")],
+            results=[
+                _result("A", _report_cmd(), executed=False, reason="robot not placed")
+            ],
         )
 
 
@@ -453,7 +531,9 @@ class TestEdgeCases:
         """All four corners of a 5x5 board should be valid PLACE targets."""
         for x, y in [(0, 0), (4, 0), (0, 4), (4, 4)]:
             res = _sim(["A"], [[f"PLACE {x},{y},NORTH"]])
-            assert res.snapshots[0].results[0].executed is True, f"Corner ({x},{y}) should be placeable"
+            assert res.snapshots[0].results[0].executed is True, (
+                f"Corner ({x},{y}) should be placeable"
+            )
 
     def test_place_just_outside_board(self):
         """Coordinates exactly at width/height are out of bounds."""
@@ -511,5 +591,12 @@ class TestEdgeCases:
         assert res.snapshots[1] == Snapshot(
             turn=1,
             robots=[_robot("A", 0, 2, Direction.EAST)],
-            results=[_result("A", _move_cmd(10), executed=False, reason='blocked by obstacle "wall" at (1,2)')],
+            results=[
+                _result(
+                    "A",
+                    _move_cmd(10),
+                    executed=False,
+                    reason='blocked by obstacle "wall" at (1,2)',
+                )
+            ],
         )
