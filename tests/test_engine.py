@@ -540,11 +540,13 @@ class TestEdgeCases:
         """Coordinates exactly at width/height are out of bounds."""
         res = _sim(["A"], [["PLACE 5,0,NORTH"]])
         assert res.snapshots[0].results[0].executed is False
-        assert res.snapshots[0].results[0].reason is not None and "out of bounds" in res.snapshots[0].results[0].reason
+        reason = res.snapshots[0].results[0].reason
+        assert reason is not None and "out of bounds" in reason
 
         res = _sim(["A"], [["PLACE 0,5,NORTH"]])
         assert res.snapshots[0].results[0].executed is False
-        assert res.snapshots[0].results[0].reason is not None and "out of bounds" in res.snapshots[0].results[0].reason
+        reason = res.snapshots[0].results[0].reason
+        assert reason is not None and "out of bounds" in reason
 
     def test_move_zero_count(self):
         """MOVE 0 is parsed but results in no movement; executed=False."""

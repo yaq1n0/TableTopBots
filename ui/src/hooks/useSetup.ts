@@ -13,13 +13,17 @@ export function useSetup(
 ) {
   const [width, setWidth] = useState(5)
   const [height, setHeight] = useState(5)
-  const [obstacles, setObstacles] = useState<Record<string, [number, number][]>>({})
+  const [obstacles, setObstacles] = useState<
+    Record<string, [number, number][]>
+  >({})
   const [activeObstacleName, setActiveObstacleName] = useState('')
   const [robots, setRobots] = useState<Robot[]>([])
 
   const robotColorIndex = useMemo(() => {
     const index: Record<string, number> = {}
-    robots.forEach((r, i) => { index[r.name] = i })
+    robots.forEach((r, i) => {
+      index[r.name] = i
+    })
     return index
   }, [robots])
 
@@ -42,7 +46,10 @@ export function useSetup(
   }
 
   async function handleRun() {
-    const maxLen = robots.length === 0 ? 0 : Math.max(...robots.map((r) => r.commands.length))
+    const maxLen =
+      robots.length === 0
+        ? 0
+        : Math.max(...robots.map((r) => r.commands.length))
     const paddedStacks = robots.map((r) => {
       const stack: (string | null)[] = [...r.commands]
       while (stack.length < maxLen) stack.push(null)
@@ -64,11 +71,16 @@ export function useSetup(
   }
 
   return {
-    width, setWidth,
-    height, setHeight,
-    obstacles, setObstacles,
-    activeObstacleName, setActiveObstacleName,
-    robots, setRobots,
+    width,
+    setWidth,
+    height,
+    setHeight,
+    obstacles,
+    setObstacles,
+    activeObstacleName,
+    setActiveObstacleName,
+    robots,
+    setRobots,
     robotColorIndex,
     handleCellClick,
     handleRun,

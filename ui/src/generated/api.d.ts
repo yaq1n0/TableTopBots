@@ -4,598 +4,592 @@
  */
 
 export interface paths {
-    "/simulate": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Run Simulation */
-        post: operations["run_simulation_simulate_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/validate": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Validate Command */
-        post: operations["validate_command_validate_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/parse-file": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Parse File */
-        post: operations["parse_file_parse_file_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/data/configs": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List Configs */
-        get: operations["list_configs_data_configs_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/data/configs/{name}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Load Config */
-        get: operations["load_config_data_configs__name__get"];
-        put?: never;
-        /** Save Config */
-        post: operations["save_config_data_configs__name__post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/data/instructions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** List Instructions */
-        get: operations["list_instructions_data_instructions_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/data/instructions/{name}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Load Instructions */
-        get: operations["load_instructions_data_instructions__name__get"];
-        put?: never;
-        /** Save Instructions */
-        post: operations["save_instructions_data_instructions__name__post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
+  '/simulate': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Run Simulation */
+    post: operations['run_simulation_simulate_post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/validate': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Validate Command */
+    post: operations['validate_command_validate_post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/parse-file': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Parse File */
+    post: operations['parse_file_parse_file_post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/data/configs': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Configs */
+    get: operations['list_configs_data_configs_get']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/data/configs/{name}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Load Config */
+    get: operations['load_config_data_configs__name__get']
+    put?: never
+    /** Save Config */
+    post: operations['save_config_data_configs__name__post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/data/instructions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** List Instructions */
+    get: operations['list_instructions_data_instructions_get']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/data/instructions/{name}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Load Instructions */
+    get: operations['load_instructions_data_instructions__name__get']
+    put?: never
+    /** Save Instructions */
+    post: operations['save_instructions_data_instructions__name__post']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
 }
-export type webhooks = Record<string, never>;
+export type webhooks = Record<string, never>
 export interface components {
-    schemas: {
-        /** Body_parse_file_parse_file_post */
-        Body_parse_file_parse_file_post: {
-            /** File */
-            file: string;
-        };
-        /** Command */
-        Command: {
-            /**
-             * Type
-             * @enum {string}
-             */
-            type: "PLACE" | "MOVE" | "LEFT" | "RIGHT" | "REPORT";
-            /** X */
-            x?: number | null;
-            /** Y */
-            y?: number | null;
-            facing?: components["schemas"]["Direction"] | null;
-            /**
-             * Count
-             * @default 1
-             */
-            count: number;
-        };
-        /** CommandResult */
-        CommandResult: {
-            /** Robot Name */
-            robot_name: string;
-            command?: components["schemas"]["Command"] | null;
-            /** Executed */
-            executed: boolean;
-            /** Reason */
-            reason?: string | null;
-            /** Output */
-            output?: string | null;
-        };
-        /** ConfigFile */
-        ConfigFile: {
-            /**
-             * Width
-             * @default 5
-             */
-            width: number;
-            /**
-             * Height
-             * @default 5
-             */
-            height: number;
-            /**
-             * Obstacles
-             * @default {}
-             */
-            obstacles: {
-                [key: string]: [
-                    number,
-                    number
-                ][];
-            };
-            /**
-             * Robots
-             * @default []
-             */
-            robots: components["schemas"]["ConfigRobot"][];
-        };
-        /** ConfigRobot */
-        ConfigRobot: {
-            /** Name */
-            name: string;
-            /** Commands */
-            commands: string[];
-        };
-        /**
-         * Direction
-         * @enum {string}
-         */
-        Direction: "NORTH" | "SOUTH" | "EAST" | "WEST";
-        /** FileListResponse */
-        FileListResponse: {
-            /** Files */
-            files: string[];
-        };
-        /** HTTPValidationError */
-        HTTPValidationError: {
-            /** Detail */
-            detail?: components["schemas"]["ValidationError"][];
-        };
-        /** InstructionsFile */
-        InstructionsFile: {
-            /** Commands */
-            commands: string[];
-        };
-        /** ParseFileResponse */
-        ParseFileResponse: {
-            /** Commands */
-            commands: string[];
-        };
-        /** RobotState */
-        RobotState: {
-            /** Name */
-            name: string;
-            /**
-             * X
-             * @default 0
-             */
-            x: number;
-            /**
-             * Y
-             * @default 0
-             */
-            y: number;
-            /** @default NORTH */
-            facing: components["schemas"]["Direction"];
-            /**
-             * Placed
-             * @default false
-             */
-            placed: boolean;
-        };
-        /** SimulationRequest */
-        SimulationRequest: {
-            /**
-             * Width
-             * @default 5
-             */
-            width: number;
-            /**
-             * Height
-             * @default 5
-             */
-            height: number;
-            /**
-             * Obstacles
-             * @default {}
-             */
-            obstacles: {
-                [key: string]: [
-                    number,
-                    number
-                ][];
-            };
-            /**
-             * Robot Names
-             * @default []
-             */
-            robot_names: string[];
-            /**
-             * Command Stacks
-             * @default []
-             */
-            command_stacks: (string | null)[][];
-        };
-        /** SimulationResponse */
-        SimulationResponse: {
-            /** Snapshots */
-            snapshots: components["schemas"]["Snapshot"][];
-        };
-        /** Snapshot */
-        Snapshot: {
-            /** Turn */
-            turn: number;
-            /** Robots */
-            robots: components["schemas"]["RobotState"][];
-            /** Results */
-            results: components["schemas"]["CommandResult"][];
-        };
-        /** ValidateRequest */
-        ValidateRequest: {
-            /** Command */
-            command: string;
-        };
-        /** ValidationError */
-        ValidationError: {
-            /** Location */
-            loc: (string | number)[];
-            /** Message */
-            msg: string;
-            /** Error Type */
-            type: string;
-            /** Input */
-            input?: unknown;
-            /** Context */
-            ctx?: Record<string, never>;
-        };
-        /** ValidationResponse */
-        ValidationResponse: {
-            /** Valid */
-            valid: boolean;
-            /** Error */
-            error?: string | null;
-        };
-    };
-    responses: never;
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+  schemas: {
+    /** Body_parse_file_parse_file_post */
+    Body_parse_file_parse_file_post: {
+      /** File */
+      file: string
+    }
+    /** Command */
+    Command: {
+      /**
+       * Type
+       * @enum {string}
+       */
+      type: 'PLACE' | 'MOVE' | 'LEFT' | 'RIGHT' | 'REPORT'
+      /** X */
+      x?: number | null
+      /** Y */
+      y?: number | null
+      facing?: components['schemas']['Direction'] | null
+      /**
+       * Count
+       * @default 1
+       */
+      count: number
+    }
+    /** CommandResult */
+    CommandResult: {
+      /** Robot Name */
+      robot_name: string
+      command?: components['schemas']['Command'] | null
+      /** Executed */
+      executed: boolean
+      /** Reason */
+      reason?: string | null
+      /** Output */
+      output?: string | null
+    }
+    /** ConfigFile */
+    ConfigFile: {
+      /**
+       * Width
+       * @default 5
+       */
+      width: number
+      /**
+       * Height
+       * @default 5
+       */
+      height: number
+      /**
+       * Obstacles
+       * @default {}
+       */
+      obstacles: {
+        [key: string]: [number, number][]
+      }
+      /**
+       * Robots
+       * @default []
+       */
+      robots: components['schemas']['ConfigRobot'][]
+    }
+    /** ConfigRobot */
+    ConfigRobot: {
+      /** Name */
+      name: string
+      /** Commands */
+      commands: string[]
+    }
+    /**
+     * Direction
+     * @enum {string}
+     */
+    Direction: 'NORTH' | 'SOUTH' | 'EAST' | 'WEST'
+    /** FileListResponse */
+    FileListResponse: {
+      /** Files */
+      files: string[]
+    }
+    /** HTTPValidationError */
+    HTTPValidationError: {
+      /** Detail */
+      detail?: components['schemas']['ValidationError'][]
+    }
+    /** InstructionsFile */
+    InstructionsFile: {
+      /** Commands */
+      commands: string[]
+    }
+    /** ParseFileResponse */
+    ParseFileResponse: {
+      /** Commands */
+      commands: string[]
+    }
+    /** RobotState */
+    RobotState: {
+      /** Name */
+      name: string
+      /**
+       * X
+       * @default 0
+       */
+      x: number
+      /**
+       * Y
+       * @default 0
+       */
+      y: number
+      /** @default NORTH */
+      facing: components['schemas']['Direction']
+      /**
+       * Placed
+       * @default false
+       */
+      placed: boolean
+    }
+    /** SimulationRequest */
+    SimulationRequest: {
+      /**
+       * Width
+       * @default 5
+       */
+      width: number
+      /**
+       * Height
+       * @default 5
+       */
+      height: number
+      /**
+       * Obstacles
+       * @default {}
+       */
+      obstacles: {
+        [key: string]: [number, number][]
+      }
+      /**
+       * Robot Names
+       * @default []
+       */
+      robot_names: string[]
+      /**
+       * Command Stacks
+       * @default []
+       */
+      command_stacks: (string | null)[][]
+    }
+    /** SimulationResponse */
+    SimulationResponse: {
+      /** Snapshots */
+      snapshots: components['schemas']['Snapshot'][]
+    }
+    /** Snapshot */
+    Snapshot: {
+      /** Turn */
+      turn: number
+      /** Robots */
+      robots: components['schemas']['RobotState'][]
+      /** Results */
+      results: components['schemas']['CommandResult'][]
+    }
+    /** ValidateRequest */
+    ValidateRequest: {
+      /** Command */
+      command: string
+    }
+    /** ValidationError */
+    ValidationError: {
+      /** Location */
+      loc: (string | number)[]
+      /** Message */
+      msg: string
+      /** Error Type */
+      type: string
+      /** Input */
+      input?: unknown
+      /** Context */
+      ctx?: Record<string, never>
+    }
+    /** ValidationResponse */
+    ValidationResponse: {
+      /** Valid */
+      valid: boolean
+      /** Error */
+      error?: string | null
+    }
+  }
+  responses: never
+  parameters: never
+  requestBodies: never
+  headers: never
+  pathItems: never
 }
-export type $defs = Record<string, never>;
+export type $defs = Record<string, never>
 export interface operations {
-    run_simulation_simulate_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SimulationRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimulationResponse"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    validate_command_validate_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ValidateRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ValidationResponse"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    parse_file_parse_file_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "multipart/form-data": components["schemas"]["Body_parse_file_parse_file_post"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ParseFileResponse"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    list_configs_data_configs_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["FileListResponse"];
-                };
-            };
-        };
-    };
-    load_config_data_configs__name__get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                name: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ConfigFile"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    save_config_data_configs__name__post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                name: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ConfigFile"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ConfigFile"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    list_instructions_data_instructions_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["FileListResponse"];
-                };
-            };
-        };
-    };
-    load_instructions_data_instructions__name__get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                name: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["InstructionsFile"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    save_instructions_data_instructions__name__post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                name: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["InstructionsFile"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["InstructionsFile"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
+  run_simulation_simulate_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['SimulationRequest']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['SimulationResponse']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  validate_command_validate_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ValidateRequest']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ValidationResponse']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  parse_file_parse_file_post: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'multipart/form-data': components['schemas']['Body_parse_file_parse_file_post']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ParseFileResponse']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  list_configs_data_configs_get: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['FileListResponse']
+        }
+      }
+    }
+  }
+  load_config_data_configs__name__get: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        name: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ConfigFile']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  save_config_data_configs__name__post: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        name: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ConfigFile']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ConfigFile']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  list_instructions_data_instructions_get: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['FileListResponse']
+        }
+      }
+    }
+  }
+  load_instructions_data_instructions__name__get: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        name: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['InstructionsFile']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
+  save_instructions_data_instructions__name__post: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        name: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['InstructionsFile']
+      }
+    }
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['InstructionsFile']
+        }
+      }
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
 }

@@ -15,10 +15,11 @@ export default function App() {
 
   const playback = usePlayback()
 
-  const setup = useSetup(
-    (res) => { playback.load(res); setPhase('run'); setError(null) },
-    setError,
-  )
+  const setup = useSetup((res) => {
+    playback.load(res)
+    setPhase('run')
+    setError(null)
+  }, setError)
 
   function handleReset() {
     playback.reset()
@@ -26,7 +27,8 @@ export default function App() {
     setError(null)
   }
 
-  const canRun = setup.robots.length > 0 && setup.robots.every((r) => r.commands.length > 0)
+  const canRun =
+    setup.robots.length > 0 && setup.robots.every((r) => r.commands.length > 0)
   const displayRobots = playback.currentSnapshot?.robots ?? []
 
   return (
@@ -43,9 +45,7 @@ export default function App() {
             </button>
           )}
         </div>
-        <h1 className="text-xl font-bold text-gray-800">
-          Toy Robot Simulator
-        </h1>
+        <h1 className="text-xl font-bold text-gray-800">Toy Robot Simulator</h1>
         <div className="w-24 flex justify-end">
           {phase === 'setup' && (
             <button
@@ -81,7 +81,9 @@ export default function App() {
               robots={displayRobots}
               obstacles={setup.obstacles}
               robotColorIndex={setup.robotColorIndex}
-              onCellClick={phase === 'setup' ? setup.handleCellClick : undefined}
+              onCellClick={
+                phase === 'setup' ? setup.handleCellClick : undefined
+              }
             />
           </div>
         </div>

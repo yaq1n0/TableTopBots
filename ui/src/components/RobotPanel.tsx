@@ -69,18 +69,27 @@ function RobotPanelRun({ name, result }: RunProps) {
   )
 }
 
-function RobotPanelSetup({ name, commands, onCommandsChange, onRemove }: SetupProps) {
+function RobotPanelSetup({
+  name,
+  commands,
+  onCommandsChange,
+  onRemove,
+}: SetupProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Use local draft text so the textarea preserves whitespace/newlines while typing.
   // Only sync trimmed, non-empty commands to the parent on change.
-  const commandsJoined = commands.filter((c): c is string => c !== null).join('\n')
+  const commandsJoined = commands
+    .filter((c): c is string => c !== null)
+    .join('\n')
   const [draft, setDraft] = useState(commandsJoined)
   const [instructionFiles, setInstructionFiles] = useState<string[]>([])
   const [infoMessage, setInfoMessage] = useState<string | null>(null)
 
   useEffect(() => {
-    listInstructions().then(setInstructionFiles).catch(() => {})
+    listInstructions()
+      .then(setInstructionFiles)
+      .catch(() => {})
   }, [])
 
   // Sync draft when commands change externally (e.g. file import)

@@ -96,12 +96,16 @@ export default function SetupPanel({
 }: Props) {
   const [newRobotName, setNewRobotName] = useState('')
   const [newObstacleName, setNewObstacleName] = useState('')
-  const [editingObstacleName, setEditingObstacleName] = useState<string | null>(null)
+  const [editingObstacleName, setEditingObstacleName] = useState<string | null>(
+    null,
+  )
   const [configNames, setConfigNames] = useState<string[]>([])
   const [infoMessage, setInfoMessage] = useState<string | null>(null)
 
   useEffect(() => {
-    listConfigs().then(setConfigNames).catch(() => {})
+    listConfigs()
+      .then(setConfigNames)
+      .catch(() => {})
   }, [])
 
   async function handleLoadConfig(name: string) {
@@ -229,8 +233,16 @@ export default function SetupPanel({
       <div>
         <h2 className="text-sm font-bold mb-2 text-gray-200">Board Size</h2>
         <div className="space-y-2">
-          <DimensionInput label="Width" value={width} onChange={onWidthChange} />
-          <DimensionInput label="Height" value={height} onChange={onHeightChange} />
+          <DimensionInput
+            label="Width"
+            value={width}
+            onChange={onWidthChange}
+          />
+          <DimensionInput
+            label="Height"
+            value={height}
+            onChange={onHeightChange}
+          />
         </div>
       </div>
 
@@ -248,7 +260,9 @@ export default function SetupPanel({
           />
           <button
             onClick={addObstacle}
-            disabled={!newObstacleName.trim() || newObstacleName.trim() in obstacles}
+            disabled={
+              !newObstacleName.trim() || newObstacleName.trim() in obstacles
+            }
             className="px-2 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Add
@@ -276,15 +290,20 @@ export default function SetupPanel({
                         defaultValue={name}
                         className="bg-gray-600 text-white rounded px-1 py-0.5 text-xs w-full"
                         onClick={(e) => e.stopPropagation()}
-                        onBlur={(e) => commitRenameObstacle(name, e.target.value)}
+                        onBlur={(e) =>
+                          commitRenameObstacle(name, e.target.value)
+                        }
                         onKeyDown={(e) => {
-                          if (e.key === 'Enter') commitRenameObstacle(name, e.currentTarget.value)
+                          if (e.key === 'Enter')
+                            commitRenameObstacle(name, e.currentTarget.value)
                           if (e.key === 'Escape') setEditingObstacleName(null)
                         }}
                       />
                     ) : (
                       <>
-                        <span className="font-medium text-gray-200 truncate">{name}</span>
+                        <span className="font-medium text-gray-200 truncate">
+                          {name}
+                        </span>
                         <span className="text-gray-400 flex-shrink-0">
                           {cells.length} cell{cells.length !== 1 ? 's' : ''}
                         </span>
@@ -294,14 +313,20 @@ export default function SetupPanel({
                   <div className="flex gap-1 flex-shrink-0 ml-1">
                     {isSelected && !isEditing && (
                       <button
-                        onClick={(e) => { e.stopPropagation(); startRenameObstacle(name) }}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          startRenameObstacle(name)
+                        }}
                         className="text-gray-400 hover:text-white text-[10px]"
                       >
                         Rename
                       </button>
                     )}
                     <button
-                      onClick={(e) => { e.stopPropagation(); removeObstacle(name) }}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        removeObstacle(name)
+                      }}
                       className="text-red-400 hover:text-red-300 text-[10px]"
                     >
                       Remove
@@ -333,7 +358,10 @@ export default function SetupPanel({
           />
           <button
             onClick={addRobot}
-            disabled={!newRobotName.trim() || robots.some((r) => r.name === newRobotName.trim())}
+            disabled={
+              !newRobotName.trim() ||
+              robots.some((r) => r.name === newRobotName.trim())
+            }
             className="px-2 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Add
@@ -350,7 +378,6 @@ export default function SetupPanel({
           />
         ))}
       </div>
-
     </div>
   )
 }

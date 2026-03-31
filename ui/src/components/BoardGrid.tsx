@@ -83,7 +83,9 @@ export default function BoardGrid({
               {robot && (
                 <div
                   className={`${
-                    ROBOT_COLORS[robotColorIndex[robot.name] % ROBOT_COLORS.length]
+                    ROBOT_COLORS[
+                      robotColorIndex[robot.name] % ROBOT_COLORS.length
+                    ]
                   } rounded-full w-3/4 aspect-square flex flex-col items-center justify-center text-white`}
                 >
                   <span className="text-[7px] font-bold leading-none truncate max-w-full">

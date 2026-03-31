@@ -5,7 +5,13 @@ interface Props {
   duration?: number
 }
 
-function InfoBannerInner({ message, duration = 2000 }: { message: string; duration?: number }) {
+function InfoBannerInner({
+  message,
+  duration = 2000,
+}: {
+  message: string
+  duration?: number
+}) {
   const [visible, setVisible] = useState(true)
 
   useEffect(() => {

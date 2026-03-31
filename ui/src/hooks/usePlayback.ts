@@ -25,6 +25,7 @@ export function usePlayback() {
     totalTurns,
     load,
     reset,
-    setTurn: (t: number) => setCurrentTurn(Math.max(0, Math.min(totalTurns - 1, t))),
+    setTurn: (t: number) =>
+      setCurrentTurn(Math.max(0, Math.min(totalTurns - 1, t))),
   }
 }

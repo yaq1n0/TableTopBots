@@ -4,11 +4,7 @@ interface Props {
   onChange: (turn: number) => void
 }
 
-export default function Timeline({
-  currentTurn,
-  totalTurns,
-  onChange,
-}: Props) {
+export default function Timeline({ currentTurn, totalTurns, onChange }: Props) {
   const maxTurn = totalTurns - 1
 
   return (
